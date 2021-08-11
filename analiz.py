@@ -1,7 +1,7 @@
 #wikipedi sayfası var mı yok mu  hangi ekler geliyor onu da yapcam gerçek bir kelime olup olmadığına bakcak sonra gerçek kelimeyse ingilizcesini yazcak gerçek kelimeyse sözlük anlamını yazcak etimolojisini falan yazcak
 # harfleri rastgele karıştırıp rastgele bir cümle oluşturmak
-#bütün harflerin küçültülmesi lazım yoksa program harfleri algılamaz
 #şapkalı harfler
+#google translate girip atıyorum kullanıcı merto yazdı merto'nun bütün dilleri taratarak gerçek bir kelime mi kelimeyse hangi dilde olduğunu ve ne anlama geldiğini türkçe yazacak
 unluHarfler = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü']
 kalinUnlu = ['a', 'ı', 'o', 'u']
 inceUnlu = ['e', 'i', 'ö', 'ü', ]
@@ -11,6 +11,12 @@ sertUnsuz = ['']
 yumusakUnsuz = ['']
 
 turkceHarfler = ['ı', 'ğ', 'ü', 'ş', 'İ', 'ö', 'ç']
+
+def kucuk(kucuklestir):
+    kucuklestir = kucuklestir.replace("İ", "i")
+    kucuklestir = kucuklestir.replace("I", "ı")
+    kucuklestir = kucuklestir.lower()
+    return kucuklestir
 
 def etimoloji(aranacak):
     res = requests.get(f'https://www.etimolojiturkce.com/kelime/{aranacak}')
@@ -22,18 +28,18 @@ def etimoloji(aranacak):
 
 def harfListe(cumle, kelime, liste,):
     say=0
-    for harf in liste:
-        if harf in kelime:
+    for harf in kelime:
+        if harf in liste:
             say = say + 1
     print(cumle, say)
 
 def uygulama():
     while True:
-        analiz=input('Analiz edilecek kelimeyi girin. ')
+        analiz=kucuk(input('Analiz edilecek kelimeyi girin. '))
 
         print('-----------------------------------------------------------------------')
         print("Kelime sayısı:",len(analiz.split()))
-        print('Toplam harf:', len(analiz))
+        print('Toplam harf:', len(analiz)-len(analiz.split())+1)
         harfListe('hece ve ünlü sayısı:', analiz, unluHarfler)
         harfListe('Türkçe harflerin sayısı:', analiz, turkceHarfler)
         say=0
