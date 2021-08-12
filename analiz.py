@@ -2,15 +2,15 @@
 # harfleri rastgele karıştırıp rastgele bir cümle oluşturmak
 #şapkalı harfler
 #google translate girip atıyorum kullanıcı merto yazdı merto'nun bütün dilleri taratarak gerçek bir kelime mi kelimeyse hangi dilde olduğunu ve ne anlama geldiğini türkçe yazacak
-unluHarfler = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü']
+unlu = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü']
 kalinUnlu = ['a', 'ı', 'o', 'u']
 inceUnlu = ['e', 'i', 'ö', 'ü', ]
 
-unsuzHarfler = ['']
-sertUnsuz = ['']
-yumusakUnsuz = ['']
+unsuz = ['b', 'c', 'ç', 'd', 'f', 'g', 'ğ', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 'ş', 't', 'v', 'y', 'z']
+sertUnsuz = ['p', 'ç', 't', 'k', 's', 'ş', 'h', 'f']
+yumusakUnsuz = ['b', 'c', 'd', 'g', 'ğ', 'j', 'l', 'm', 'n', 'r','v', 'y', 'z']
 
-turkceHarfler = ['ı', 'ğ', 'ü', 'ş', 'İ', 'ö', 'ç']
+turkce = ['ı', 'ğ', 'ü', 'ş', 'İ', 'ö', 'ç']
 
 def kucuk(kucuklestir):
     kucuklestir = kucuklestir.replace("İ", "i")
@@ -26,12 +26,18 @@ def etimoloji(aranacak):
     else:
         print(f'"{aranacak}" kelimeinin etimolojisi bulundu.')
 
-def harfListe(cumle, kelime, liste,):
+def harfListe(yazdir, kelime, liste,):
     say=0
     for harf in kelime:
         if harf in liste:
             say = say + 1
-    print(cumle, say)
+    print(yazdir, say)
+
+def kelimeBasi(yazdir, kelime, cumle):
+    say=0
+    for kelimeler in analiz.split():
+        etimoloji(analiz.split()[say])
+        say = say + 1
 
 def uygulama():
     while True:
@@ -40,8 +46,9 @@ def uygulama():
         print('-----------------------------------------------------------------------')
         print("Kelime sayısı:",len(analiz.split()))
         print('Toplam harf:', len(analiz)-len(analiz.split())+1)
-        harfListe('hece ve ünlü sayısı:', analiz, unluHarfler)
-        harfListe('Türkçe harflerin sayısı:', analiz, turkceHarfler)
+        harfListe('hece ve ünlü sayısı:', analiz, unlu)
+        harfListe('Ünsüz sayısı:', analiz, unsuz)
+        harfListe('Türkçe harflerin sayısı:', analiz, turkce)
         say=0
         for kelimeler in analiz.split():
             etimoloji(analiz.split()[say])
