@@ -12,6 +12,22 @@ yumusakUnsuz = ['b', 'c', 'd', 'g', 'ğ', 'j', 'l', 'm', 'n', 'r','v', 'y', 'z']
 
 turkce = ['ı', 'ğ', 'ü', 'ş', 'İ', 'ö', 'ç']
 
+def mertfsmal():
+    time.sleep(0.06)
+    print("""                       _    __                     _""")
+    time.sleep(0.06)
+    print("""                      | |  / _|                   | |""")
+    time.sleep(0.06)
+    print("""   _ __ ___   ___ _ __| |_| |_ ___ _ __ ___   __ _| |""")
+    time.sleep(0.06)
+    print("""  | '_ ` _ \ / _ \ '__| __|  _/ __| '_ ` _ \ / _` | |""")
+    time.sleep(0.06)
+    print("""  | | | | | |  __/ |  | |_| | \__ \ | | | | | (_| | |""")
+    time.sleep(0.06)
+    print("""  |_| |_| |_|\___|_|   \__|_| |___/_| |_| |_|\__,_|_|""")
+    time.sleep(0.06)
+    print()
+
 def kucuk(kucuklestir):
     kucuklestir = kucuklestir.replace("İ", "i")
     kucuklestir = kucuklestir.replace("I", "ı")
@@ -41,24 +57,32 @@ def kelimeBasi(yazdir, kelime, cumle):
 
 def uygulama():
     while True:
+        time.sleep(0.6)
+        print()
         analiz=kucuk(input('Analiz edilecek kelimeyi girin. '))
-
-        print('-----------------------------------------------------------------------')
+        print('-')
+        print('Genel bilgi:')
         print("Kelime sayısı:",len(analiz.split()))
         print('Toplam harf:', len(analiz)-len(analiz.split())+1)
-        harfListe('hece ve ünlü sayısı:', analiz, unlu)
-        harfListe('Ünsüz sayısı:', analiz, unsuz)
-        harfListe('Türkçe harflerin sayısı:', analiz, turkce)
-        say=0
-        for kelimeler in analiz.split():
-            etimoloji(analiz.split()[say])
-            say = say + 1
-        print('-----------------------------------------------------------------------')
+        for kelime in analiz.split():
+            time.sleep(0.6)
+            print('-')
+            print(f'{kelime} kelimesinin analizi:')
+            harfListe('hece ve ünlü sayısı:', kelime, unlu)
+            harfListe('Ünsüz sayısı:', kelime, unsuz)
+            harfListe('Türkçe harflerin sayısı:', kelime, turkce)
+            etimoloji(kelime)
 
 if __name__ == '__main__':
     try:
+        import time
         import requests
         import bs4
+        mertfsmal()
+        time.sleep(0.5)
+        print('Github: github.com/mertfsmal')
+        time.sleep(0.5)
+        print('Repository : https://github.com/mertfsmal/kelime-analiz')
         uygulama()
     except Exception as e:
         m=input('Hatayı görüntülemek için "e" yazın. ')
