@@ -2,6 +2,8 @@
 # harfleri rastgele karıştırıp rastgele bir cümle oluşturmak
 #şapkalı harfler
 #google translate girip atıyorum kullanıcı merto yazdı merto'nun bütün dilleri taratarak gerçek bir kelime mi kelimeyse hangi dilde olduğunu ve ne anlama geldiğini türkçe yazacak
+#benzer kelimeler
+#mesela kullanıcı 12 harfli a ile başlayan diyor program o kelimeleri bulsun
 unlu = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü']
 kalinUnlu = ['a', 'ı', 'o', 'u']
 inceUnlu = ['e', 'i', 'ö', 'ü', ]
@@ -27,6 +29,12 @@ def mertfsmal():
     print("""  |_| |_| |_|\___|_|   \__|_| |___/_| |_| |_|\__,_|_|""")
     time.sleep(0.06)
     print()
+    time.sleep(0.5)
+    print('Github: github.com/mertfsmal')
+    time.sleep(0.5)
+    print('Repository: https://github.com/mertfsmal/kelime-analiz')
+    time.sleep(0.5)
+    print('Discord: mrt#0269')
 
 def kucuk(kucuklestir):
     kucuklestir = kucuklestir.replace("İ", "i")
@@ -49,12 +57,6 @@ def harfListe(yazdir, kelime, liste,):
             say = say + 1
     print(yazdir, say)
 
-def kelimeBasi(yazdir, kelime, cumle):
-    say=0
-    for kelimeler in analiz.split():
-        etimoloji(analiz.split()[say])
-        say = say + 1
-
 def uygulama():
     while True:
         time.sleep(0.6)
@@ -68,8 +70,12 @@ def uygulama():
             time.sleep(0.6)
             print('-')
             print(f'{kelime} kelimesinin analizi:')
-            harfListe('hece ve ünlü sayısı:', kelime, unlu)
-            harfListe('Ünsüz sayısı:', kelime, unsuz)
+            harfListe('ünlü ve hece sayısı:', kelime, unlu)
+            harfListe('Kalın ünlü harflerin sayısı:', kelime, kalinUnlu)
+            harfListe('İnce ünlü harflerin sayısı:', kelime, inceUnlu)
+            harfListe('Ünsüz harflerin sayısı:', kelime, unsuz)
+            harfListe('Yumuşak ünsüz harflerin sayısı:', kelime, yumusakUnsuz)
+            harfListe('Sert ünsüz harflerin sayısı:', kelime, sertUnsuz)
             harfListe('Türkçe harflerin sayısı:', kelime, turkce)
             etimoloji(kelime)
 
@@ -79,10 +85,6 @@ if __name__ == '__main__':
         import requests
         import bs4
         mertfsmal()
-        time.sleep(0.5)
-        print('Github: github.com/mertfsmal')
-        time.sleep(0.5)
-        print('Repository : https://github.com/mertfsmal/kelime-analiz')
         uygulama()
     except Exception as e:
         m=input('Hatayı görüntülemek için "e" yazın. ')
