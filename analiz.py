@@ -36,7 +36,7 @@ def mertfsmal():
     time.sleep(0.5)
     print('Discord: mrt#0269')
     time.sleep(0.5)
-    print('Kaynaklar: www.kelimeler.net, www.etimolojiturkce.com')
+    print('Kaynaklar: www.kelimeler.net, www.etimolojiturkce.com, www.sozluk.gov.tr')
 
 def kucuk(kucuklestir):
     kucuklestir = kucuklestir.replace("İ", "i")
@@ -55,7 +55,7 @@ def ingilizce(ingilizcelestir):
     ingilizcelestir = ingilizcelestir.replace("ü", "u")
     return ingilizcelestir
 
-def etimoloji(aranacak):
+def etimolojiTurkce(aranacak):
     res = requests.get(f'https://www.etimolojiturkce.com/kelime/{aranacak}')
     soup = bs4.BeautifulSoup(res.text, "html.parser")
     if soup.title.string == '404 Not Found':
@@ -70,7 +70,7 @@ def harfListe(yazdir, kelime, liste,):
             say = say + 1
     print(yazdir, say)
 
-def kelimeler(aranacak):
+def kelimelernet(aranacak):
     if len(aranacak)-1 >= 1:
         aranacak=ingilizce(aranacak.replace('.', ''))
         if len(aranacak.split()) >= 2:
@@ -93,13 +93,30 @@ def kelimeler(aranacak):
     else:
         print(' "." ile başlayıp devamını getirmedin.')
 
+def sozlukgovtr(aranacak):
+    if len(aranacak.split()) != 1:
+        print(f'sadece 1 kelime arayabilirsiniz. ({len(aranacak.split())} tane kelime aramayı denediniz.)')
+    else:
+        res = requests.get(f'https://sozluk.gov.tr/gts?ara={aranacak}')
+        soup = bs4.BeautifulSoup(res.text, "html.parser")
+        bilgi = json.loads(res.text)
+        #print(bilgi)
+        if str(soup) == '{"error":"Sonuç bulunamadı"}':
+            print(f'{aranacak} kelimesi sozluk.gov.tr adresinde bulunamadı.')
+        else:
+            for i in range(int(bilgi[0]['anlam_say'])):
+                time.sleep(0.8)
+                print(f'{i+1}. anlamı:', bilgi[0]['anlamlarListe'][i]['anlam'])
+            print('Cümle içerisinde örnek:', bilgi[0]['anlamlarListe'][0]['orneklerListe'][0]['ornek'])
+            print('Birleşikler:', bilgi[0]['birlesikler'])
+
 def uygulama():
     while True:
         time.sleep(0.6)
         print()
         analiz=kucuk(input('Analiz edilecek kelimeyi girin. '))
         if analiz.startswith('.'):
-            kelimeler(analiz)
+            kelimelernet(analiz)
         else:
             print('-')
             print('Genel bilgi:')
@@ -116,10 +133,12 @@ def uygulama():
                 harfListe('Yumuşak ünsüz harflerin sayısı:', kelime, yumusakUnsuz)
                 harfListe('Sert ünsüz harflerin sayısı:', kelime, sertUnsuz)
                 harfListe('Türkçe harflerin sayısı:', kelime, turkce)
-                etimoloji(kelime)
+                etimolojiTurkce(kelime)
+                sozlukgovtr(kelime)
 
 if __name__ == '__main__':
     try:
+        import json
         import time
         import requests
         import bs4
@@ -133,7 +152,6 @@ if __name__ == '__main__':
     #    print('Siteye bağlanılamadı.')
     #    input()
     except Exception as e:
-        m=input('Hatayı görüntülemek için "e" yazın. ')
-        if m=='e':
-            print(e)
-            input()
+        print(e)
+        input()
+        pass
