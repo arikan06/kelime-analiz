@@ -4,6 +4,13 @@
 #google translate girip atıyorum kullanıcı merto yazdı merto'nun bütün dilleri taratarak gerçek bir kelime mi kelimeyse hangi dilde olduğunu ve ne anlama geldiğini türkçe yazacak
 #benzer kelimeler
 #mesela kullanıcı 12 harfli a ile başlayan diyor program o kelimeleri bulsun
+#ünlü yumuşaması
+#sesli okuma
+#https://sozluk.gov.tr/icerik
+#https://sozluk.gov.tr/yazim?ara=mert
+#https://sozluk.gov.tr/assets/js/autocompleteSapka.json
+#https://sozluk.gov.tr/autocomplete.json
+#https://sozluk.gov.tr/terim?terim
 unlu = ['a', 'e', 'ı', 'i', 'o', 'ö', 'u', 'ü']
 kalinUnlu = ['a', 'ı', 'o', 'u']
 inceUnlu = ['e', 'i', 'ö', 'ü', ]
@@ -98,18 +105,25 @@ def sozlukgovtr(aranacak):
         print(f'sadece 1 kelime arayabilirsiniz. ({len(aranacak.split())} tane kelime aramayı denediniz.)')
     else:
         res = requests.get(f'https://sozluk.gov.tr/gts?ara={aranacak}')
-        soup = bs4.BeautifulSoup(res.text, "html.parser")
-        bilgi = json.loads(res.text)
-        #print(bilgi)
-        if str(soup) == '{"error":"Sonuç bulunamadı"}':
+        #soup = bs4.BeautifulSoup(res.text, "html.parser")
+        sozlukgovtrjson = json.loads(res.text)
+        res = requests.get(f'https://sozluk.gov.tr/yazim?ara={aranacak}')
+        yazimAra = json.loads(res.text)
+        #print(yazimAra)
+        #print(sozlukgovtrjson)
+        if str(sozlukgovtrjson) == '{"error":"Sonuç bulunamadı"}':
             print(f'{aranacak} kelimesi sozluk.gov.tr adresinde bulunamadı.')
         else:
-            for i in range(int(bilgi[0]['anlam_say'])):
+            r = requests.get(f"https://sozluk.gov.tr/ses/{yazimAra[0]['seskod']+'.wav'}")
+            with open("ses.mp3", 'wb') as f:
+                f.write(r.content)
+            playsound('ses.mp3')
+            for i in range(int(sozlukgovtrjson[0]['anlam_say'])):
                 time.sleep(0.8)
-                print(f'{i+1}. anlamı:', bilgi[0]['anlamlarListe'][i]['anlam'])
-            print('Cümle içerisinde örnek:', bilgi[0]['anlamlarListe'][0]['orneklerListe'][0]['ornek'])
-            print('Birleşikler:', bilgi[0]['birlesikler'])
-
+                print(f'{aranacak} kelimesinin {i+1}. anlamı:', sozlukgovtrjson[0]['anlamlarListe'][i]['anlam'])
+            print('Cümle içerisinde örnek:', sozlukgovtrjson[0]['anlamlarListe'][0]['orneklerListe'][0]['ornek'])
+            print('Birleşikler:', sozlukgovtrjson[0]['birlesikler'])
+            
 def uygulama():
     while True:
         time.sleep(0.6)
@@ -133,7 +147,9 @@ def uygulama():
                 harfListe('Yumuşak ünsüz harflerin sayısı:', kelime, yumusakUnsuz)
                 harfListe('Sert ünsüz harflerin sayısı:', kelime, sertUnsuz)
                 harfListe('Türkçe harflerin sayısı:', kelime, turkce)
+                print('-')
                 etimolojiTurkce(kelime)
+                print('-')
                 sozlukgovtr(kelime)
 
 if __name__ == '__main__':
@@ -142,12 +158,15 @@ if __name__ == '__main__':
         import time
         import requests
         import bs4
+        from playsound import playsound
         mertfsmal()
         uygulama()
     except ModuleNotFoundError:
         import pip
         pip.main(['install requests'])
         pip.main(['install bs4'])
+        pip.main(['install playsound'])
+
     #except HTTPSConnectionPool:
     #    print('Siteye bağlanılamadı.')
     #    input()
